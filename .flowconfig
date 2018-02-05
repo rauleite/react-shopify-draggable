@@ -1,0 +1,11 @@
+[ignore]
+.*/node_modules/*
+.*/next/*
+
+[include]
+
+[libs]
+flow-typed/npm/
+flow-typed/types/
+
+[options]

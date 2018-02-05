@@ -1,23 +1,26 @@
+// @flow
+// MyContainer.js
 import React, { Component, Fragment } from 'react'
 import { withDraggable } from '../lib'
-// import withDraggable from 'react-shopify-draggable'
 
-const Hello = () => <li>Hello</li>
+const Hello = () => {
+  return <li>Hello</li>
+}
 
 const World = () => (
   <Fragment>
     <li>World</li>
-    <li>!!!!!</li>
+    <li>Drag-me</li>
   </Fragment>
 )
 
-class MyContainer extends Component {
-  // SSR First
+class MyContainerWithDraggable extends Component {
+  // SSR First: react-shopify-draggable não bloqueia sua aplicação.
   componentDidMount() {
-    console.log('withDraggable: ', withDraggable)
-    console.log('#My componentDidMount: ')
+    // sua instância de draggable
     this.draggable = this.props.draggable()
 
+    // https://github.com/Shopify/draggable/tree/master/src/Draggable#api
     this.draggable.on('drag:start', this.dragStart)
     this.draggable.on('drag:move', this.dragMove)
     this.draggable.on('drag:stop', this.dragStop)
@@ -27,10 +30,10 @@ class MyContainer extends Component {
     console.log('drag:start')
   }
   dragMove() {
-    // console.log('drag:move')
+    console.log('drag:move')
   }
   dragStop() {
-    // console.log('drag:stop')
+    console.log('drag:stop')
   }
 
   render() {
@@ -42,15 +45,18 @@ class MyContainer extends Component {
     )
   }
 }
-// Check doc reference: https://github.com/Shopify/draggable/tree/master/src
-export default withDraggable(
-  MyContainer,
-  // Cuidado para não usar arrow function (que mantém contexto)
+// withDraggable(Component, container, options)
+// containers: HTMLElement[]|NodeList|HTMLElement
+// options: https://github.com/Shopify/draggable/tree/master/src/Draggable#options
+const MyContainer = withDraggable(
+  MyContainerWithDraggable,
   function() {
     return document.querySelector('ul')
   },
   { draggable: 'li' }
 )
+
+export default MyContainer
 
 // export default MyContainer
 

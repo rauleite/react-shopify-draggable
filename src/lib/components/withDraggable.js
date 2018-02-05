@@ -9,11 +9,11 @@ type Props = {
 }
 
 export default function withDraggable(
-  WrapperComponent: React.ComponentType<Props>,
+  InnerComponent: React.ComponentType<Props>,
   select: () => HTMLElement,
   options: Options
-) {
-  return class DraggableContainer extends React.Component {
+): React.ComponentType {
+  return class extends React.Component {
     constructor(props) {
       super(props)
       this.draggableInstance = this.draggableInstance.bind(this)
@@ -46,8 +46,7 @@ export default function withDraggable(
 
     // Compartilha instancia com filho
     render() {
-      return <WrapperComponent draggable={this.draggableInstance} />
+      return <InnerComponent draggable={this.draggableInstance} />
     }
   }
 }
-
