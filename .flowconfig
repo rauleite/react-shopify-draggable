@@ -6,6 +6,6 @@
 
 [libs]
 flow-typed/npm/
-flow-typed/types/
+flow-typed/react-shopify-draggable/
 
 [options]

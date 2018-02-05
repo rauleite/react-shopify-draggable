@@ -1,20 +1,8 @@
 // @flow
-// MyContainer.js
 import React, { Component, Fragment } from 'react'
-import { withDraggable } from '../lib'
-
-const Hello = () => {
-  return <li>Hello</li>
-}
-
-const World = () => (
-  <Fragment>
-    <li>World</li>
-    <li>Drag-me</li>
-  </Fragment>
-)
-
-class MyContainerWithDraggable extends Component {
+import { withDraggable } from '../../lib'
+import { Hello, Drag } from './etc/Hello'
+class MyDraggable extends Component {
   // SSR First: react-shopify-draggable não bloqueia sua aplicação.
   componentDidMount() {
     // sua instância de draggable
@@ -24,6 +12,12 @@ class MyContainerWithDraggable extends Component {
     this.draggable.on('drag:start', this.dragStart)
     this.draggable.on('drag:move', this.dragMove)
     this.draggable.on('drag:stop', this.dragStop)
+  }
+
+  componentWillUnmount() {
+    // opcional lidar com destroy, uma vez que React Shopify Draggable já destruirá
+    // quando MyDraggable for Unmounted
+    this.draggable.destroy()
   }
 
   dragStart() {
@@ -40,32 +34,18 @@ class MyContainerWithDraggable extends Component {
     return (
       <ul>
         <Hello />
-        <World />
+        <Drag />
       </ul>
     )
   }
 }
-// withDraggable(Component, container, options)
+
 // containers: HTMLElement[]|NodeList|HTMLElement
+const selector = function() {
+  return document.querySelector('ul')
+}
 // options: https://github.com/Shopify/draggable/tree/master/src/Draggable#options
-const MyContainer = withDraggable(
-  MyContainerWithDraggable,
-  function() {
-    return document.querySelector('ul')
-  },
-  { draggable: 'li' }
-)
+const options = { draggable: 'li' }
 
-export default MyContainer
-
-// export default MyContainer
-
-// state = {
-//   styles: {
-//     touchAction:
-//       userAgent.has('os', 'name', 'Android') &&
-//       userAgent.has('browser', 'name', 'Chrome')
-//         ? 'none'
-//         : null
-//   }
-// }
+// withDraggable(Component, container, options)
+export default withDraggable(MyDraggable, selector, options)
